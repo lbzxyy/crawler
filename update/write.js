@@ -34,6 +34,16 @@ exports.articles = async function (articles) {
                 article.id,article.title,article.content,article.href
             ])
         }
+        // 处理我们文章和标签的关系 先全部删除此文章所有标签 然后再插入
+        await query(`DELETE FROM article_tag WHERE article_id=?`,[article.id])
+        // 查询一下此文章的对应标签的ID数组
+        let tagWhere = "'" + article.tags.join(" ',' ") + "'"
+        let tagIds = await query(`SELECT id FROM tags WHERE name IN (${tagWhere})`)
+        for(tagId of tagIds) {
+            await query(`INSERT INTO article_tag (tag_id,article_id) VALUES(?,?)`,[
+                tagId.id,article.id
+            ])
+        }
     }
 }
 
@@ -53,10 +63,9 @@ exports.articles = async function (articles) {
 // ])
 
 exports.articles([
-    {id:'id1',title: 'title11111',content: 'content11111',href: 'href11111'},
-    {id:'id2',title: 'title22222',content: 'content22222',href: 'href22222'}
+    {id:'id1',title: 'title11111',content: 'content11111',href: 'href11111',tags: ['title1']},
+    {id:'id2',title: 'title22222',content: 'content22222',href: 'href888888',tags: ['title2']}
 ])
-
 
 
 
