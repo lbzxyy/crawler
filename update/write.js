@@ -21,17 +21,56 @@ exports.tags = async function(tags) {
     }
 }
 
-exports.tags([
-    {
-        title: 'title1',
-        image: 'image111',
-        subscribe: 111,
-        article: 111
-    },
-    {
-        title: 'title2',
-        image: 'image222',
-        subscribe: 222,
-        article: 222
+// 此方法用于文章 将文章保存到mysql数据库中去
+exports.articles = async function (articles) {
+    for (const article of articles) {
+        let oldArticles = await query(`SELECT * FROM articles WHERE id=?`,[article.id])
+        if(Array.isArray(oldArticles) && oldArticles.length>0) {
+            await query(`UPDATE articles SET title=?, content=?, href=? WHERE id=?`,[
+                article.title,article.content,article.href,article.id
+            ])
+        }else{
+            await query(`INSERT INTO articles (id,title,content,href) VALUES(?,?,?,?)`,[
+                article.id,article.title,article.content,article.href
+            ])
+        }
     }
+}
+
+// exports.tags([
+//     {
+//         title: 'title1',
+//         image: 'image111',
+//         subscribe: 111,
+//         article: 111
+//     },
+//     {
+//         title: 'title2',
+//         image: 'image222',
+//         subscribe: 222,
+//         article: 222
+//     }
+// ])
+
+exports.articles([
+    {id:'id1',title: 'title11111',content: 'content11111',href: 'href11111'},
+    {id:'id2',title: 'title22222',content: 'content22222',href: 'href22222'}
 ])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
