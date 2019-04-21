@@ -29,8 +29,7 @@
                 article: Number(article.match(/^(\d+)/)[1])
             })
         })
-        console.log(tags);
-        return tags.slice(0,1)
+        return tags
 
     })
  }
@@ -54,7 +53,7 @@ exports.articleList = async function(url){
         let articleTitles = $('.content-box .info-box .title-row .title')
         let articles = []
         // 在foreach里 ecah里 是不能使用await 方法的 for of可以 普通for循环也可以
-        for (let index = 0; index < 1; index++) {
+        for (let index = 0; index < articleTitles.length; index++) {
             const article = $(articleTitles[index]);
             let href = article.attr('href')
             let title = article.text()
@@ -74,11 +73,11 @@ exports.articleList = async function(url){
     })
 }
 
-let articleUrl = 'https://juejin.im/tag/%E5%89%8D%E7%AB%AF'
+// let articleUrl = 'https://juejin.im/tag/%E5%89%8D%E7%AB%AF'
 
-exports.articleList(articleUrl).then( articles => {
-    console.log(articles);
-})
+// exports.articleList(articleUrl).then( articles => {
+//     console.log(articles);
+// })
 
 
 async function articleDetail(url) {
@@ -89,7 +88,7 @@ async function articleDetail(url) {
         }
     }
     return request(options).then($=> {
-        let content = $('.article-content').first()
+        let content = $('.article-content').first().text()
         let tagTitles = $('.tag-list .item .tag-title')
         let tags = []
         tagTitles.each((index, title) => {
@@ -107,3 +106,4 @@ async function articleDetail(url) {
 //     console.log(article);
     
 // })
+

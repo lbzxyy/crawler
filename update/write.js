@@ -4,18 +4,17 @@ const { query } = require('../db')
 exports.tags = async function(tags) {
     for ( tag of tags) {
       let oldTags =  await query(`SELECT * FROM tags WHERE name=?`,[tag.title])
-      console.log(oldTags);
        
       if(Array.isArray(oldTags) && oldTags.length>0) {
         //   查询到数据 则应该是更新数据
 
-        await query(`UPDATE tags SET image=?, subscribe=?, article=? WHERE id=?`,[
-            tag.image,tag.subscribe,tag.article,oldTags[0].id
+        await query(`UPDATE tags SET image=?, subscribe=?, article=?,href=? WHERE id=?`,[
+            tag.image,tag.subscribe,tag.article,tag.href,oldTags[0].id
         ])
       }else{
           // 插入数据
-         await query(`INSERT INTO tags (name,image,subscribe,article) VALUES(?,?,?,?)`,[
-             tag.title,tag.image,tag.subscribe,tag.article
+         await query(`INSERT INTO tags (name,image,subscribe,article,href) VALUES(?,?,?,?,?)`,[
+             tag.title,tag.image,tag.subscribe,tag.article,tag.href
          ])
       }
     }
@@ -62,10 +61,13 @@ exports.articles = async function (articles) {
 //     }
 // ])
 
-exports.articles([
-    {id:'id1',title: 'title11111',content: 'content11111',href: 'href11111',tags: ['title1']},
-    {id:'id2',title: 'title22222',content: 'content22222',href: 'href888888',tags: ['title2']}
-])
+// exports.articles([
+//     {id:'id1',title: 'title11111',content: 'content11111',href: 'href11111',tags: ['title1']},
+//     {id:'id2',title: 'title22222',content: 'content22222',href: 'href888888',tags: ['title2']}
+// ])
+
+
+
 
 
 
